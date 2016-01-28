@@ -1,9 +1,21 @@
-// var express = require('express');
-// var router = express.Router();
-//
-// /* GET home page. */
-// router.get('/auth/linkedin', function(req, res, next) {
-//   passport.authenticate('linkedin')
-// });
-//
-// module.exports = router;
+var express = require('express');
+var router = express.Router();
+var passport = require('passport')
+
+/* GET home page. */
+router.get('/linkedin', passport.authenticate('linkedin'));
+
+router.get('/logout', function (req, res, next) {
+  console.log(req.session);
+  req.session = null;
+  res.redirect('/');
+});
+
+router.get('/linkedin/callback', passport.authenticate('linkedin', { failureRedirect: '/' }), function (req, res, next) {
+  res.redirect('/')
+});
+
+
+
+
+module.exports = router;

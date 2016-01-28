@@ -8,11 +8,12 @@ var session = require('cookie-session');
 var passport = require('passport');
 var LinkedInStrategy = require('passport-linkedin').Strategy;
 
+
 require('dotenv').load();
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
-// var auth = require('./routes/auth');
+var auth = require('./routes/auth');
 
 var app = express();
 
@@ -59,8 +60,8 @@ passport.deserializeUser(function(user, done) {
 });
 
 app.use('/', routes);
+app.use('/auth', auth);
 app.use('/users', users);
-// app.use('/', auth);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
