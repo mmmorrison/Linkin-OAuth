@@ -6,7 +6,6 @@ var passport = require('passport')
 router.get('/linkedin', passport.authenticate('linkedin'));
 
 router.get('/logout', function (req, res, next) {
-  console.log(req.session);
   req.session = null;
   res.redirect('/');
 });
