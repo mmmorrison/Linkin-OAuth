@@ -31,12 +31,12 @@ app.use(session({ keys: [process.env.SESSION_KEY1, process.env.SESSION_KEY2] }))
 app.use(passport.initialize());
 app.use(passport.session());
 
+// below app.use(passport.session());...
 passport.use(new LinkedInStrategy({
     consumerKey: process.env.LINKEDIN_CLIENT_ID,
     consumerSecret: process.env.LINKEDIN_CLIENT_SECRET,
     callbackURL: process.env.HOST + "/auth/linkedin/callback"
   },
-
   function(token, tokenSecret, profile, done) {
     // To keep the example simple, the user's LinkedIn profile is returned to
     // represent the logged-in user. In a typical application, you would want
@@ -45,12 +45,18 @@ passport.use(new LinkedInStrategy({
     done(null, profile)
   }
 ));
+// above app.use('/', routes);...
 passport.serializeUser(function(user, done) {
+ // later this will be where you selectively send to the browser an identifier for your user,
+ // like their primary key from the database, or their ID from linkedin
+  done(null, user);
+});
+
 passport.deserializeUser(function(user, done) {
-    //here is where you will go to the database and get the user each time from it's id, after you set up your db
-    done(null, user)
-  });
-  
+  //here is where you will go to the database and get the user each time from it's id, after you set up your db
+  done(null, user)
+});
+
 app.use('/', routes);
 app.use('/users', users);
 
